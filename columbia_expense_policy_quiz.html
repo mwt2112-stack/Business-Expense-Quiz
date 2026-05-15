@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Columbia Expense Policy Quiz — 30 Questions</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --blue:#3f57bd;--navy:#183765;--ink:#172033;--muted:#64748b;--line:#d8dee8;
+  --gold:#B68F47;--gold-bright:#C9A050;--gold-bg:#fff8df;
+  --bg:#e6e6e6;--white:#ffffff;--off-white:#fffdf6;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
+  --red:#991b1b;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#92400e;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --dk-bg:#2a2d31;--dk-bg-2:#34383d;--dk-bg-card:#2f3338;
+  --dk-border:rgba(216,214,207,.1);--dk-border-md:rgba(216,214,207,.16);
+  --dk-text:#d8d6cf;--dk-dim:#8a8d92;--dk-faint:#4a4d52;
+  --dk-columbia:#9BCBEB;--dk-gold:#B68F47;--dk-gold-b:#D4A857;--dk-gold-pale:#E8D9B0;
+  --dk-grid:rgba(155,203,235,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Source Sans 3',Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+body{background-image:linear-gradient(rgba(117,168,201,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(117,168,201,.18) 1px,transparent 1px),linear-gradient(rgba(117,168,201,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(117,168,201,.07) 1px,transparent 1px);background-size:40px 40px,40px 40px,8px 8px,8px 8px;}
+
+/* ── TOPBAR ── */
+.topbar{height:68px;background:var(--white);border-bottom:1px solid #b8c5d8;display:flex;align-items:center;padding:0 2rem;gap:1rem;position:sticky;top:0;z-index:300;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.logo{color:var(--navy);font-size:13px;font-weight:800;line-height:1.1;}
+.logo span{display:block;font-size:7px;letter-spacing:.1em;font-weight:600;color:var(--muted);}
+.topbar-divider{width:1px;height:28px;background:var(--line);}
+.topbar-title{font-size:18px;color:var(--navy);font-weight:600;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:.75rem;}
+.score-pill{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.1em;background:var(--gold-bg);border:1.5px solid var(--gold);color:var(--gold-bright);border-radius:999px;padding:.25rem .75rem;font-weight:700;}
+
+/* ── HERO BAND ── */
+.hero-band{background:var(--blue);color:#fff;padding:1.4rem 2rem;display:flex;align-items:center;gap:2rem;border-bottom:3px solid var(--navy);flex-wrap:wrap;}
+.band-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;opacity:.7;margin-bottom:.2rem;}
+.band-value{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:500;}
+.band-divider{width:1px;height:36px;background:rgba(255,255,255,.2);}
+.progress-wrap{background:rgba(255,255,255,.15);border-radius:999px;height:6px;width:180px;overflow:hidden;}
+.progress-bar{height:100%;background:#fff;border-radius:999px;transition:width .4s ease;}
+
+/* ── MAIN ── */
+main{max-width:860px;margin:2.5rem auto;padding:0 1.5rem 4rem;}
+
+/* ── SECTION TABS ── */
+.section-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.section-tab{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:.35rem .85rem;border-radius:999px;border:1.5px solid var(--line);background:var(--white);color:var(--muted);cursor:pointer;font-weight:600;transition:all .2s;}
+.section-tab.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+.section-tab.done{background:var(--green-bg);border-color:var(--green-border);color:var(--green);}
+
+/* ── CARD ── */
+.quiz-card{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.card-header{background:var(--navy);color:#fff;padding:1.25rem 1.75rem;}
+.q-number{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;opacity:.7;margin-bottom:.3rem;}
+.q-text{font-family:'Fraunces',serif;font-size:1.18rem;font-weight:500;line-height:1.5;}
+.q-ref{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;opacity:.5;margin-top:.5rem;}
+.card-body{padding:1.5rem 1.75rem;}
+
+/* ── OPTIONS ── */
+.options{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.25rem;}
+.option{display:flex;align-items:flex-start;gap:.9rem;padding:.9rem 1.1rem;border:2px solid var(--line);border-radius:8px;cursor:pointer;transition:all .18s;background:var(--off-white);}
+.option:hover:not(.disabled){border-color:var(--blue);background:#f0f4ff;}
+.option.correct{border-color:#16a34a;background:var(--green-bg);}
+.option.incorrect{border-color:#dc2626;background:var(--red-bg);}
+.option.reveal-correct{border-color:#16a34a;background:var(--green-bg);}
+.option.disabled{cursor:default;}
+.opt-letter{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;width:1.5rem;min-width:1.5rem;height:1.5rem;border-radius:4px;background:var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);margin-top:.05rem;flex-shrink:0;}
+.option.correct .opt-letter{background:#16a34a;color:#fff;}
+.option.incorrect .opt-letter{background:#dc2626;color:#fff;}
+.option.reveal-correct .opt-letter{background:#16a34a;color:#fff;}
+.opt-text{font-size:.97rem;line-height:1.45;color:var(--ink);}
+
+/* ── EXPLANATION ── */
+.explanation{display:none;margin-top:.5rem;padding:1rem 1.1rem;border-radius:8px;border-left:4px solid var(--blue);background:#f0f4ff;}
+.explanation.correct-exp{border-color:#16a34a;background:var(--green-bg);}
+.explanation.incorrect-exp{border-color:#dc2626;background:var(--red-bg);}
+.exp-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;}
+.exp-label.correct-lbl{color:var(--green);}
+.exp-label.incorrect-lbl{color:var(--red);}
+.exp-text{font-size:.93rem;line-height:1.55;color:var(--ink);}
+.exp-ref{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);margin-top:.5rem;letter-spacing:.04em;}
+
+/* ── CARD FOOTER ── */
+.card-footer{padding:1rem 1.75rem;border-top:1px solid var(--line);display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
+.btn{padding:.6rem 1.4rem;border-radius:6px;font-size:.9rem;font-weight:700;border:none;cursor:pointer;font-family:'Source Sans 3',sans-serif;transition:all .18s;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-primary:hover{background:var(--navy);}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--line);}
+.btn-ghost:hover{background:var(--line);}
+.btn:disabled{opacity:.4;cursor:default;}
+
+/* ── RESULTS ── */
+.results-card{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center;padding:3rem 2rem;}
+.results-trophy{font-size:4rem;margin-bottom:1rem;}
+.results-score{font-family:'Fraunces',serif;font-size:3.5rem;font-weight:600;color:var(--navy);line-height:1;}
+.results-label{font-size:1rem;color:var(--muted);margin:.5rem 0 1.5rem;}
+.results-grade{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;padding:.4rem 1rem;border-radius:999px;font-weight:700;margin-bottom:2rem;}
+.grade-a{background:var(--green-bg);color:var(--green);border:1.5px solid var(--green-border);}
+.grade-b{background:#eff6ff;color:#1d4ed8;border:1.5px solid #bfdbfe;}
+.grade-c{background:var(--amber-bg);color:var(--amber);border:1.5px solid var(--amber-border);}
+.grade-d{background:var(--red-bg);color:var(--red);border:1.5px solid var(--red-border);}
+.section-breakdown{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;}
+.breakdown-item{background:var(--off-white);border:1px solid var(--line);border-radius:8px;padding:.75rem 1.25rem;min-width:140px;}
+.breakdown-sect{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem;}
+.breakdown-score{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:600;color:var(--navy);}
+.section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;}
+.section-badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;background:var(--navy);color:#fff;border-radius:4px;padding:.3rem .7rem;font-weight:700;}
+.section-title{font-size:1rem;font-weight:700;color:var(--navy);}
+.golden-rule{background:var(--gold-bg);border:1.5px solid var(--gold);border-radius:8px;padding:1rem 1.25rem;font-size:.9rem;line-height:1.6;margin-bottom:1.75rem;color:var(--amber);}
+
+/* ── DARK SPLASH ── */
+#splash-screen{
+  min-height:calc(100vh - 68px);
+  background-image:linear-gradient(var(--dk-grid) 1px,transparent 1px),linear-gradient(90deg,var(--dk-grid) 1px,transparent 1px),radial-gradient(ellipse at top,rgba(155,203,235,.06),transparent 55%),radial-gradient(ellipse at bottom,rgba(182,143,71,.04),transparent 55%);
+  background-size:32px 32px,32px 32px,100% 100%,100% 100%;
+  background-color:var(--dk-bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:3rem 1.5rem;text-align:center;
+}
+.splash-instr{width:100%;max-width:620px;background:rgba(182,143,71,.1);border:1px solid rgba(182,143,71,.28);border-radius:6px;padding:.85rem 1.25rem;font-size:.9rem;line-height:1.65;color:var(--dk-gold-pale);margin-bottom:2.5rem;text-align:left;font-family:'Source Sans 3',sans-serif;}
+.splash-instr strong{color:var(--dk-gold-b);font-weight:700;}
+.splash-icon{font-size:3.2rem;margin-bottom:1.1rem;display:block;}
+.splash-title{font-family:'Fraunces',serif;font-size:2rem;font-weight:500;color:var(--dk-text);margin-bottom:.9rem;}
+.splash-desc{font-size:.97rem;line-height:1.7;color:var(--dk-dim);max-width:480px;margin:0 auto 2rem;}
+.splash-desc strong{color:var(--dk-text);font-weight:700;}
+.splash-stats{display:flex;gap:1px;background:var(--dk-border);border:1px solid var(--dk-border-md);border-radius:6px;overflow:hidden;margin-bottom:2rem;}
+.splash-stat{flex:1;min-width:110px;background:var(--dk-bg-card);padding:.85rem 1.25rem;}
+.splash-stat-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dk-dim);margin-bottom:.3rem;}
+.splash-stat-value{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500;color:var(--dk-text);}
+.splash-stat-value.small{font-size:1rem;padding-top:.2rem;font-family:'JetBrains Mono',monospace;font-weight:400;}
+.btn-begin{display:inline-flex;align-items:center;gap:.6rem;background:var(--dk-columbia);color:#1a2a38;border:none;border-radius:6px;padding:.8rem 2rem;font-size:.95rem;font-weight:700;cursor:pointer;font-family:'Source Sans 3',sans-serif;letter-spacing:.03em;transition:all .18s;box-shadow:0 2px 12px rgba(155,203,235,.2);}
+.btn-begin:hover{background:#b8ddf2;transform:translateY(-1px);}
+.btn-begin svg{width:16px;height:16px;transition:transform .2s;}
+.btn-begin:hover svg{transform:translateX(3px);}
+
+footer{text-align:center;padding:2rem;font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);background:var(--white);margin-top:3rem;}
+@media(max-width:600px){
+  .topbar{padding:0 1rem;}.hero-band{padding:1rem;gap:1rem;}
+  .card-header,.card-body,.card-footer{padding:1rem 1.1rem;}
+  .splash-stats{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">COLUMBIA UNIVERSITY<span>EXPENSE POLICY ASSESSMENT</span></div>
+  <div class="topbar-divider"></div>
+  <div class="topbar-title">Quiz — 30 Questions</div>
+  <div class="topbar-right">
+    <div class="score-pill" id="score-pill">Score: 0 / 0</div>
+  </div>
+</div>
+
+<div class="hero-band" id="hero-band" style="display:none;">
+  <div>
+    <div class="band-label">Section</div>
+    <div class="band-value" id="band-section">Section 1 of 3</div>
+  </div>
+  <div class="band-divider"></div>
+  <div>
+    <div class="band-label">Question</div>
+    <div class="band-value" id="band-question">1 of 10</div>
+  </div>
+  <div class="band-divider"></div>
+  <div style="flex:1;min-width:120px;">
+    <div class="band-label">Progress</div>
+    <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- DARK SPLASH -->
+<div id="splash-screen">
+  <div class="splash-instr">
+    <strong>Instructions:</strong> Questions are drawn from Columbia University's Business Expense Policy and Travel Expense Policy. Select the best answer based on current University policy. You can go back and change your answer at any time.
+  </div>
+  <span class="splash-icon">📋</span>
+  <div class="splash-title">Expense Policy Quiz</div>
+  <p class="splash-desc">
+    30 questions across Business Expenses, Travel Policy, and Compliance &amp; Edge Cases.<br>
+    Take your time — no timer. Navigate back to revisit any question.
+  </p>
+  <div class="splash-stats">
+    <div class="splash-stat">
+      <div class="splash-stat-label">Sections</div>
+      <div class="splash-stat-value">3</div>
+    </div>
+    <div class="splash-stat">
+      <div class="splash-stat-label">Questions</div>
+      <div class="splash-stat-value">30</div>
+    </div>
+    <div class="splash-stat">
+      <div class="splash-stat-label">Pace</div>
+      <div class="splash-stat-value small">Untimed</div>
+    </div>
+  </div>
+  <button class="btn-begin" onclick="beginQuiz()">
+    Begin Quiz
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </button>
+</div>
+
+<!-- QUIZ WRAPPER -->
+<main id="quiz-main" style="display:none;">
+  <div class="section-tabs" id="section-tabs">
+    <div class="section-tab active" onclick="goSection(0)">Section 1 — Business Expenses</div>
+    <div class="section-tab" onclick="goSection(1)">Section 2 — Travel Policy</div>
+    <div class="section-tab" onclick="goSection(2)">Section 3 — Compliance &amp; Edge Cases</div>
+  </div>
+  <div id="quiz-area"></div>
+  <div id="results-area" style="display:none;"></div>
+</main>
+
+<footer>Columbia University · Expense Policy Quiz · 30 Questions · Business Expense &amp; Travel Policy</footer>
+
+<script>
+const SECTIONS = [
+  {
+    title: "Section 1 — Business Expenses",
+    label: "Business Expenses",
+    questions: [
+      {
+        q: "What is the maximum number of days after an expense is incurred that a reimbursement request must be submitted to avoid it being treated as taxable income?",
+        opts: ["60 days","90 days","120 days","365 days"],
+        answer: 2,
+        exp: "Expense reports must be submitted no later than 120 days after the date of the expenditure. Submissions after 120 days require payee justification and Financial Approval, and may be treated as taxable income.",
+        ref: "Business Expense Policy — Reimbursement Submission Time Limit"
+      },
+      {
+        q: "A faculty member hosts a dinner with a major donor to discuss a potential gift to the University. What is the per-person meal threshold (excluding tips and tax) before Senior Business Officer approval is required?",
+        opts: ["$75 per person","$100 per person","$150 per person","$200 per person"],
+        answer: 2,
+        exp: "For business meals hosted by CU involving external parties (donors, trustees, prospective employees, etc.), the per-person threshold is $150 excluding tips and tax. Amounts above this require SBO approval and must be segregated.",
+        ref: "Business Expense Policy — Business Meals Hosted by CU Involving Certain External Parties"
+      },
+      {
+        q: "An employee purchases office supplies for $350 using personal funds because the University purchasing system was unavailable. Will this be reimbursed?",
+        opts: ["No — personal purchases are never reimbursable","Yes — amounts under $500 may be reimbursed","Yes — but only with a Purchase Order","No — the threshold is $250"],
+        answer: 1,
+        exp: "Employees may be reimbursed for out-of-pocket supply purchases under $500 when CU purchasing mechanisms are not available. Amounts over $500 require Financial Approval, and over $2,500 require Purchasing approval.",
+        ref: "Business Expense Policy — Purchase of Supplies/Equipment Not during Travel"
+      },
+      {
+        q: "Which of the following entertainment events would NOT be reimbursable as a business expense under University policy?",
+        opts: ["A retirement celebration for a 20-year employee","A doctoral dissertation defense","An individual employee birthday party","Welcoming a new hire to the department"],
+        answer: 2,
+        exp: "Individual birthday celebrations are explicitly listed as entertainment expenses that will NOT be reimbursed. Collective birthday celebrations may be reimbursable, but individual ones are excluded.",
+        ref: "Business Expense Policy — Entertainment Expenses (Personal Occasions)"
+      },
+      {
+        q: "What is the dinner meal threshold per person (excluding tips and tax) for a business meeting involving only University personnel?",
+        opts: ["$50","$75","$100","$150"],
+        answer: 1,
+        exp: "For business meals involving only University personnel, the threshold is up to $75 for dinner (pre-tip, pre-tax). Amounts over this require SBO approval and must be segregated.",
+        ref: "Business Expense Policy — Business Meals"
+      },
+      {
+        q: "A department wants to give a long-serving employee a $500 non-cash gift for 10 years of service at a formal awards ceremony. What is required?",
+        opts: ["Nothing extra — it's fully allowable and non-taxable","Payee justification and SBO approval only","The gift must be under $400 to be non-taxable; the $500 gift requires SBO approval","Cash gifts are required for years-of-service awards"],
+        answer: 2,
+        exp: "Non-cash years-of-service gifts are non-taxable only if fair market value is $400 or less, awarded at a meaningful presentation, and given no sooner than the 5th year of service. A $500 gift exceeds the threshold and requires SBO approval — and the excess is taxable.",
+        ref: "Business Expense Policy — Years of Service Gifts"
+      },
+      {
+        q: "Under what circumstances may the University reimburse gifts given to employees?",
+        opts: ["Any occasion with department head approval","Business performance, years of service, or de minimus small gifts only","Birthdays, holidays, and personal milestones","Any occasion with SBO approval"],
+        answer: 1,
+        exp: "The University generally will not approve gifts to employees unless they fall into three categories: Business Performance recognition, Years of Service/Retirement, or 'de minimus' small gifts. Even then, tax implications may apply.",
+        ref: "Business Expense Policy — Gifts to Employees"
+      },
+      {
+        q: "An employee pays for a team dinner at $85 per person (pre-tax, pre-tip) for a focused working lunch that ran through the dinner hour. There are no external guests. What must happen for this to be reimbursed?",
+        opts: ["It is automatically reimbursed as it's under $100","SBO approval is required and the amount over $75/person must be segregated","It cannot be reimbursed since it exceeds the threshold","Financial Approval only is needed"],
+        answer: 1,
+        exp: "The dinner threshold for internal business meals is $75 per person (pre-tip, pre-tax). Since $85 exceeds this, SBO approval is required and the $10 over threshold must be segregated to the appropriate account.",
+        ref: "Business Expense Policy — Business Meals"
+      },
+      {
+        q: "Which of the following is a reimbursable gift for a non-employee?",
+        opts: ["A $700 gift to a vendor for excellent service","A $500 gift basket to a major donor in recognition of their support","A gift to a contractor who is not under a University agreement","A personal gift to a departing guest lecturer's spouse"],
+        answer: 1,
+        exp: "Gifts to non-employees are reimbursable where there is a valid business purpose (e.g., recognizing an individual's efforts in support of the University). The aggregate limit is $600/year per non-employee. Gifts to vendors are not reimbursable.",
+        ref: "Business Expense Policy — Gifts to Non-Employees"
+      },
+      {
+        q: "Under policy, who is ultimately responsible for the accuracy of an Expense Report if a Preparer Delegate submits it on behalf of the Payee?",
+        opts: ["The Preparer Delegate","The approving Financial Officer","The Payee","Accounts Payable"],
+        answer: 2,
+        exp: "Even when a Preparer Delegate prepares the Expense Report, the Payee is responsible for providing accurate information to the delegate and reviewing the report for accuracy. Responsibility stays with the Payee.",
+        ref: "Business Expense Policy — Payee / Preparer Delegate"
+      }
+    ]
+  },
+  {
+    title: "Section 2 — Travel Policy",
+    label: "Travel Policy",
+    questions: [
+      {
+        q: "What is the maximum hotel rate per night for domestic US travel (excluding taxes) before payee justification and Financial Approval are required?",
+        opts: ["$250","$300","$350","$400"],
+        answer: 2,
+        exp: "The domestic hotel threshold is $350 per night excluding taxes. Costs exceeding $350 but within 50% over (up to $525) require payee justification and Financial Approval. Over $525/night requires SBO approval.",
+        ref: "Travel Expense Policy — Lodging"
+      },
+      {
+        q: "A traveler is flying from New York to London for a conference (approximately 7 hours in the air). Under what conditions may business class be booked?",
+        opts: ["Business class is never permitted on University funds","Business class is permitted for any flight over 3 hours","Business class is permitted if the flight segment is over 5 hours and the Financial Approver confirms funds are available","Business class is always permitted for international travel"],
+        answer: 2,
+        exp: "Business class may be used when any single flight segment has a scheduled in-air time in excess of 5 hours AND the department's financial approver confirms appropriate funds are available prior to purchase. The amount above economy must still be segregated.",
+        ref: "Travel Expense Policy — First or Business Class Travel"
+      },
+      {
+        q: "An employee traveling on a federal government grant books travel from New York to Paris. Which airline requirement applies?",
+        opts: ["Any airline is acceptable as long as it's the lowest fare","A US-flag carrier or designated US airline codeshare flight is required (Fly America Act)","Only Air France may be used for Paris flights","The Fly America Act only applies to domestic travel"],
+        answer: 1,
+        exp: "Travelers on government-sponsored grants must comply with the Fly America Act, requiring travel on a US-flag carrier or a US airline designated codeshare flight. Exceptions must be documented using the Fly America Exception form.",
+        ref: "Travel Expense Policy — Air Travel / Fly America Act"
+      },
+      {
+        q: "A traveler rents a car from Hertz (the University's preferred domestic supplier). Should they purchase Loss Damage Waiver (LDW) insurance?",
+        opts: ["Yes — always purchase LDW regardless of supplier","No — the University has negotiated LDW inclusion with Hertz for US rentals","Only if the rental exceeds 7 days","Yes, but only for SUVs and larger vehicles"],
+        answer: 1,
+        exp: "When renting from Hertz in the Continental US (including Alaska, Hawaii, and DC), the University has negotiated LDW and Liability insurance inclusion. Travelers should NOT purchase LDW separately and will not be reimbursed for it.",
+        ref: "Travel Expense Policy — Domestic Car Rentals"
+      },
+      {
+        q: "A traveler extends their business trip by 3 days for personal vacation. Which costs may the University reimburse?",
+        opts: ["All costs including lodging and meals for the full trip","Only the airfare if the total fare is equal to or less than the cost for business-only travel dates","All costs if the department head approves","Lodging only during the business portion"],
+        answer: 1,
+        exp: "The University may reimburse the extended airfare only if the total fare is equal to or less than what it would have been for the business-only dates. Lodging, meals, and other costs during personal days are not reimbursable.",
+        ref: "Travel Expense Policy — Extending Travel beyond Minimum Days Required"
+      },
+      {
+        q: "What is the mileage reimbursement rate for personal vehicle use on University business travel on or after January 1, 2026?",
+        opts: ["$0.67/mile","$0.70/mile","$0.725/mile","$0.75/mile"],
+        answer: 2,
+        exp: "The personal vehicle mileage reimbursement rate for travel on or after January 1, 2026 is $0.725 per mile. This covers fuel, maintenance, insurance, and operating costs — these items are not reimbursable separately.",
+        ref: "Travel Expense Policy — Personal Vehicle Mileage Rate"
+      },
+      {
+        q: "An employee returns from a 10-day business trip. When should they submit their Expense Report?",
+        opts: ["Within 5 business days","Within 10 business days — and no later than 120 days after the trip end date","Within 30 days","Any time within 365 days"],
+        answer: 1,
+        exp: "Travelers should submit expense reports within 10 business days of the trip end date. They must submit no later than 120 days after the trip end date or face taxable income implications. Failure to submit within 365 days results in non-reimbursement.",
+        ref: "Travel Expense Policy — Reimbursement Submission Time Limit"
+      },
+      {
+        q: "A traveler stays with a friend while on University business and wants to thank their host. What can the University reimburse?",
+        opts: ["Nothing — only commercial lodging is covered","Reasonable appreciation expenses not exceeding $100, such as a small gift or meals for the host","Up to $350 (equivalent to the hotel threshold)","Any reasonable amount with Financial Approval"],
+        answer: 1,
+        exp: "Travelers staying in private residences may be reimbursed for reasonable appreciation expenses (small gift or meals for the host) not to exceed $100. If the gift exceeds $100, payee justification is required.",
+        ref: "Travel Expense Policy — Lodging in a Private Residence"
+      },
+      {
+        q: "Under the Travel Policy, which of the following is explicitly listed as a NON-reimbursable travel expense?",
+        opts: ["Laundry expenses on a 7-day trip","Vaccinations required for international travel","Business-related phone calls during the trip","Mini-bar alcoholic refreshments"],
+        answer: 3,
+        exp: "Mini-bar alcoholic refreshments are explicitly listed as non-reimbursable in Appendix B of the Travel Policy. Laundry is reimbursable on trips over 5 days; vaccinations for international business travel are reimbursable; business calls are reimbursable.",
+        ref: "Travel Expense Policy — Appendix B (Non-Reimbursable Expenses)"
+      },
+      {
+        q: "A traveler uses frequent flyer miles to purchase a business-class upgrade on a University trip. How will this be reimbursed?",
+        opts: ["The full business class fare will be reimbursed","Only the coach/economy equivalent will be reimbursed","The upgrade cost is reimbursable with SBO approval","Travelers will not be reimbursed for tickets purchased using frequent flyer miles or upgrades obtained with miles"],
+        answer: 3,
+        exp: "The University will not reimburse airline tickets purchased, partially purchased, or upgrades obtained using frequent flyer miles or credit card/airline reward points. This is an explicit exclusion under both the Travel Policy and Appendix B.",
+        ref: "Travel Expense Policy — Use of Frequent Traveler Awards / Credit Card Reward Programs"
+      }
+    ]
+  },
+  {
+    title: "Section 3 — Compliance & Edge Cases",
+    label: "Compliance & Edge Cases",
+    questions: [
+      {
+        q: "An employee submits an expense report 200 days after the transaction date with no justification. What is the most likely outcome?",
+        opts: ["The report is automatically rejected and cannot be processed","The expense may be reimbursed but treated as taxable income; expenses over 365 days will not be reimbursed at all","The SBO can approve a retroactive exception with no tax consequence","The report is sent back and must be resubmitted within 120 days"],
+        answer: 1,
+        exp: "Late submissions (beyond 120 days) require justification and Financial Approval. If circumstances would not have prevented timely submission, the reimbursement is taxable income. Submissions over 365 days from the transaction date will not be reimbursed at all.",
+        ref: "Business Expense Policy — Reimbursement Submission Time Limit"
+      },
+      {
+        q: "A department wants to reimburse a baby shower gift for an employee. Is this permitted?",
+        opts: ["Yes — gifts for birth or adoption of a child are reimbursable under the de minimus gift policy","No — baby shower gifts are explicitly excluded","Yes — with Financial Approval and up to $100","Only if given as a group gift from the whole department"],
+        answer: 0,
+        exp: "The policy allows small (de minimus) gifts for personal occasions including birth or adoption of a child. Baby shower gifts can fall under this category. However, 'showers' as entertainment events are listed as non-reimbursable entertainment — but a de minimus gift for the occasion itself is permitted.",
+        ref: "Business Expense Policy — De Minimus Small Gifts"
+      },
+      {
+        q: "Under no circumstances may an individual approve their own expense report. If a Dean needs their report approved, who must sign off?",
+        opts: ["Any Financial Approver in the department","Their direct supervisor or the appropriate approver — Deans and VPs must have reports signed by the appropriate approver","The Provost only","Accounts Payable handles dean-level approvals"],
+        answer: 1,
+        exp: "The policy explicitly states that under no circumstances may an individual approve their own report. Deans and VPs must have their reports signed by the appropriate approver. Self-approval is prohibited regardless of seniority.",
+        ref: "Business & Travel Expense Policy — Approver Roles"
+      },
+      {
+        q: "An employee pays a freelance individual $800 from personal funds to perform services for the University and submits an expense report for reimbursement. What happens?",
+        opts: ["The expense is reimbursed with Financial Approval since it's under $2,500","It will not be reimbursed — payments to individuals for services must go through Payroll or a Purchase Order","It is reimbursed as a business expense with SBO approval","It is reimbursed only if a W-9 is collected from the individual"],
+        answer: 1,
+        exp: "The University will not reimburse an employee for payments made to an individual who provided services to the University. Such payments must be processed through University Payroll (for employees) or via a Purchase Order (for consultants). An expense report is not the correct mechanism.",
+        ref: "Business Expense Policy — Payments for Services"
+      },
+      {
+        q: "A study participant receives $1,800 in compensation for a research study in calendar year 2026. What reporting obligation applies?",
+        opts: ["No reporting is required since it is under $2,000","The amount is non-taxable since participants are volunteers","Nothing — the IRB handles all reporting","Since it is under the $2,000 threshold for 2026, no 1099 is required, but the department must document that the participant has not exceeded $2,000"],
+        answer: 3,
+        exp: "For calendar year 2026, total annual study compensation of $2,000 or greater is taxable and reportable to the IRS via Form 1099. At $1,800, the participant is under the threshold, but the department must document that no participant has exceeded $2,000 annually.",
+        ref: "Business Expense Policy — Human Subject Study Payments"
+      },
+      {
+        q: "A traveler on a government grant wants to book an international rental car through a car-sharing platform (e.g., Turo). Is this permitted?",
+        opts: ["Yes — car sharing is permitted internationally if it is cheaper","No — car sharing companies may not be used and will not be reimbursed","Yes — with Financial Approver confirmation","Only if combined with a standard rental for additional days"],
+        answer: 1,
+        exp: "The Travel Policy explicitly prohibits the use of car sharing companies (booking platforms that allow renting from other car owners). Rentals booked via such platforms will not be reimbursed under any circumstances.",
+        ref: "Travel Expense Policy — Rental Cars"
+      },
+      {
+        q: "Which of the following correctly describes the treatment of alcohol costs at a business dinner charged to a sponsored research grant?",
+        opts: ["Alcohol is reimbursable on any University account including grants","Alcohol costs may be reimbursed but cannot be charged to a sponsored project — they must be segregated to the appropriate account","Alcohol is never reimbursable under any circumstances","Alcohol up to 20% of the total meal cost is chargeable to grants"],
+        answer: 1,
+        exp: "Alcohol may be reimbursed as part of a business meal. However, the cost cannot be charged to a sponsored research account and must be segregated to the appropriate (non-grant) account. This applies to both the Business Expense Policy and Travel Policy.",
+        ref: "Business & Travel Expense Policy — Segregated Costs / Business Meals"
+      },
+      {
+        q: "An employee has an outstanding cash advance that was issued 130 days ago and has not been reconciled. What consequence does the employee face?",
+        opts: ["A reminder email is sent and no further action is taken","The advance is automatically forgiven after 120 days","Advance privileges are suspended, the advance is reported as W-2 income, and taxes are withheld from the employee's paycheck","The department absorbs the cost with no impact to the employee"],
+        answer: 2,
+        exp: "If an advance is not reconciled within 120 days of the last expense date, without additional notification: advance privileges are suspended, the advance is reported as IRS income on the employee's W-2, and taxes are withheld from the paycheck. The employee remains responsible for clearing the advance.",
+        ref: "Business Expense Policy — Advances / Reconciling Advances"
+      },
+      {
+        q: "A prospective faculty hire travels to campus for an interview. The department covers airfare and hotel. Is this reimbursable to the department, and is it taxable to the candidate?",
+        opts: ["Reimbursable and taxable to the candidate","Reimbursable and not taxable to the candidate — recruitment travel is excluded from taxable income","Not reimbursable — candidates must pay their own travel","Reimbursable only if the candidate is ultimately hired"],
+        answer: 1,
+        exp: "Authorized employee recruitment travel (airfare, hotel, meals) is reimbursable by the University. Importantly, reimbursements for authorized recruitment travel expenses are not taxable to the prospective employee.",
+        ref: "Travel Expense Policy — Employee Recruitment Travel"
+      },
+      {
+        q: "The University is considering making a $10,000 charitable contribution to a local nonprofit on behalf of a department. What is required for this to be approved?",
+        opts: ["Senior Business Officer approval only","It is not permitted — the University does not reimburse contributions or donations","Written approval from the President, Provost, a Dean or VP, or Senior Financial Officer, plus verification of the recipient's 501(c)(3) status","Financial Approver sign-off is sufficient for amounts under $25,000"],
+        answer: 2,
+        exp: "Contributions from the University must be approved in writing by the President, Provost, a Dean or VP, or Senior Financial Officer. The receiving organization must demonstrate a current 501(c)(3) designation letter. Contributions to religious or political organizations are not permitted.",
+        ref: "Business Expense Policy — Contributions or Donations"
+      }
+    ]
+  }
+];
+
+let currentSection = 0, currentQ = 0, answered = false;
+let responses = {};
+let scores = [0, 0, 0], answered_counts = [0, 0, 0];
+let totalAnswered = 0, totalCorrect = 0, quizDone = false;
+
+function beginQuiz() {
+  document.getElementById('splash-screen').style.display = 'none';
+  document.getElementById('hero-band').style.display = 'flex';
+  document.getElementById('quiz-main').style.display = 'block';
+  render();
+}
+function getTotalQ() { return SECTIONS.reduce((a, s) => a + s.questions.length, 0); }
+function getGlobalIndex() {
+  let idx = 0;
+  for (let i = 0; i < currentSection; i++) idx += SECTIONS[i].questions.length;
+  return idx + currentQ;
+}
+
+function render() {
+  if (quizDone) { renderResults(); return; }
+  const sec = SECTIONS[currentSection];
+  const q = sec.questions[currentQ];
+  const globalIdx = getGlobalIndex();
+  const totalQ = getTotalQ();
+
+  document.getElementById('band-section').textContent = `Section ${currentSection + 1} of ${SECTIONS.length}`;
+  document.getElementById('band-question').textContent = `${currentQ + 1} of ${sec.questions.length}`;
+  document.getElementById('progress-bar').style.width = `${(globalIdx / totalQ) * 100}%`;
+  document.getElementById('score-pill').textContent = `Score: ${totalCorrect} / ${totalAnswered}`;
+
+  document.querySelectorAll('.section-tab').forEach((t, i) => {
+    t.className = 'section-tab';
+    if (i === currentSection) t.classList.add('active');
+    else if (answered_counts[i] === SECTIONS[i].questions.length) t.classList.add('done');
+  });
+
+  const letters = ['A','B','C','D'];
+  const prevResponse = responses[globalIdx];
+  const alreadyAnswered = prevResponse !== undefined;
+
+  const optsHtml = q.opts.map((o, i) => {
+    let cls = 'option';
+    if (alreadyAnswered) {
+      cls += ' disabled';
+      if (i === q.answer) cls += prevResponse === -1 ? ' reveal-correct' : ' correct';
+      else if (i === prevResponse) cls += ' incorrect';
+    }
+    return `<div class="${cls}" id="opt-${i}" onclick="selectOption(${i})">
+      <div class="opt-letter">${letters[i]}</div>
+      <div class="opt-text">${o}</div>
+    </div>`;
+  }).join('');
+
+  const isLast = (currentSection === SECTIONS.length - 1) && (currentQ === sec.questions.length - 1);
+  const isFirst = currentSection === 0 && currentQ === 0;
+  const nextLabel = isLast ? 'Finish →' : 'Next →';
+  const nextDisabled = alreadyAnswered ? '' : 'disabled';
+
+  let expHtml = '';
+  if (alreadyAnswered) {
+    const correct = prevResponse === q.answer;
+    const skipped = prevResponse === -1;
+    const expClass = skipped ? 'explanation' : correct ? 'explanation correct-exp' : 'explanation incorrect-exp';
+    const expLabel = skipped
+      ? `<div class="exp-label" style="color:var(--amber)">⏰ Skipped — Correct answer: ${letters[q.answer]}</div>`
+      : correct
+        ? `<div class="exp-label correct-lbl">✓ Correct!</div>`
+        : `<div class="exp-label incorrect-lbl">✗ Incorrect — Correct answer: ${letters[q.answer]}</div>`;
+    expHtml = `<div class="${expClass}" style="display:block;">${expLabel}<div class="exp-text">${q.exp}</div><div class="exp-ref">📎 ${q.ref}</div></div>`;
+  }
+
+  document.getElementById('quiz-area').innerHTML = `
+    <div class="section-header">
+      <div class="section-badge">${sec.label}</div>
+      <div class="section-title">${sec.title}</div>
+    </div>
+    <div class="quiz-card">
+      <div class="card-header">
+        <div class="q-number">Question ${currentQ + 1} of ${sec.questions.length} &nbsp;·&nbsp; #${globalIdx + 1} overall</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="card-body">
+        <div class="options">${optsHtml}</div>
+        ${expHtml}
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-ghost" ${isFirst ? 'disabled' : ''} onclick="prevQuestion()">← Back</button>
+        <button class="btn btn-ghost" id="skip-btn" ${alreadyAnswered ? 'disabled' : ''} onclick="skipQuestion()">Skip</button>
+        <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" ${nextDisabled}>${nextLabel}</button>
+      </div>
+    </div>`;
+
+  document.getElementById('results-area').style.display = 'none';
+  answered = alreadyAnswered;
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  answered = true;
+  const globalIdx = getGlobalIndex();
+  const q = SECTIONS[currentSection].questions[currentQ];
+  if (responses[globalIdx] === undefined) {
+    totalAnswered++;
+    answered_counts[currentSection]++;
+    if (idx === q.answer) { totalCorrect++; scores[currentSection]++; }
+  }
+  responses[globalIdx] = idx;
+  document.getElementById('score-pill').textContent = `Score: ${totalCorrect} / ${totalAnswered}`;
+  render();
+}
+
+function skipQuestion() {
+  if (answered) return;
+  const globalIdx = getGlobalIndex();
+  if (responses[globalIdx] === undefined) { totalAnswered++; answered_counts[currentSection]++; }
+  responses[globalIdx] = -1;
+  render();
+}
+
+function prevQuestion() {
+  if (currentQ > 0) { currentQ--; }
+  else if (currentSection > 0) { currentSection--; currentQ = SECTIONS[currentSection].questions.length - 1; }
+  render();
+}
+
+function nextQuestion() {
+  const sec = SECTIONS[currentSection];
+  if (currentQ + 1 < sec.questions.length) { currentQ++; render(); }
+  else if (currentSection + 1 < SECTIONS.length) { currentSection++; currentQ = 0; render(); }
+  else { quizDone = true; renderResults(); }
+}
+
+function goSection(idx) { currentSection = idx; currentQ = 0; render(); }
+
+function renderResults() {
+  document.getElementById('quiz-area').innerHTML = '';
+  document.getElementById('results-area').style.display = 'block';
+  document.getElementById('score-pill').textContent = `Score: ${totalCorrect} / ${getTotalQ()}`;
+  document.getElementById('progress-bar').style.width = '100%';
+  const pct = Math.round((totalCorrect / getTotalQ()) * 100);
+  let trophy, gc, gt;
+  if (pct >= 90) { trophy = '🏆'; gc = 'grade-a'; gt = 'A — Exceptional'; }
+  else if (pct >= 75) { trophy = '🎯'; gc = 'grade-b'; gt = 'B — Proficient'; }
+  else if (pct >= 60) { trophy = '📊'; gc = 'grade-c'; gt = 'C — Developing'; }
+  else { trophy = '📚'; gc = 'grade-d'; gt = 'D — Keep Studying'; }
+  const bd = SECTIONS.map((s, i) => `
+    <div class="breakdown-item">
+      <div class="breakdown-sect">${s.label}</div>
+      <div class="breakdown-score">${scores[i]} / ${s.questions.length}</div>
+    </div>`).join('');
+  document.getElementById('results-area').innerHTML = `
+    <div class="results-card">
+      <div class="results-trophy">${trophy}</div>
+      <div class="results-score">${totalCorrect}<span style="font-size:1.5rem;color:var(--muted)"> / ${getTotalQ()}</span></div>
+      <div class="results-label">${pct}% correct</div>
+      <div class="results-grade ${gc}">${gt}</div>
+      <div class="section-breakdown">${bd}</div>
+      <div class="golden-rule" style="max-width:520px;margin:0 auto 1.5rem;">
+        <strong>Key Takeaway:</strong> When in doubt — document everything, segregate alcohol, and never approve your own expense report. The 120-day rule is the clock everyone forgets.
+      </div>
+      <button class="btn btn-primary" onclick="restartQuiz()">Retake Quiz</button>
+    </div>`;
+}
+
+function restartQuiz() {
+  currentSection = 0; currentQ = 0; answered = false;
+  responses = {}; scores = [0,0,0]; answered_counts = [0,0,0];
+  totalAnswered = 0; totalCorrect = 0; quizDone = false;
+  document.getElementById('results-area').style.display = 'none';
+  render();
+}
+</script>
+</body>
+</html>
